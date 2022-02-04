@@ -1,0 +1,21 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "NODE_ENV=development mix --mix-config=./webpack.mix.js",
+        "development": "NODE_ENV=development mix --mix-config=./webpack.mix.js",
+        "watch": "NODE_ENV=development mix --mix-config=./webpack.mix.js watch",
+        "watch-poll": "mix watch -- --watch-options-poll=1000 --mix-config=./webpack.mix.js",
+        "hot": "mix watch --hot --mix-config=./webpack.mix.js",
+        "prod": "npm run production",
+        "production": "NODE_ENV=production mix --mix-config=./webpack.mix.js --production"
+    },
+    "devDependencies": {
+        "cross-env": "^7.0.0",
+        "laravel-mix": "^6.0",
+        "vue-loader": "^15.9.7",
+        "vue-template-compiler": "^2.6.14"
+    },
+    "dependencies": {
+        "vue": "^2.5.0"
+    }
+}
