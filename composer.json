@@ -3,15 +3,33 @@
     "description": "A Laravel Nova tool.",
     "keywords": [
         "laravel",
-        "nova"
+        "nova",
+        "webhooks",
+        "server"
+    ],
+    "authors": [
+        {
+            "name": "Doug Niccum",
+            "email": "dniccumdesign@gmail.com",
+            "homepage": "http://dniccumdesign.com",
+            "role": "Developer"
+        }
     ],
     "license": "MIT",
     "require": {
-        "php": ">=7.1.0"
+        "php": "^7.4|^8.0",
+        "spatie/laravel-webhook-server": "^2.0"
     },
     "autoload": {
         "psr-4": {
-            "Dniccum\\NovaWebhooks\\": "src/"
+            "Dniccum\\NovaWebhooks\\": "src/",
+            "Spatie\\WebhookServer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dniccum\\NovaWebhooks\\Tests\\": "tests",
+            "Dniccum\\NovaWebhooks\\Database\\": "database/"
         }
     },
     "extra": {
@@ -25,5 +43,9 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "require-dev": {
+        "orchestra/testbench": "^6.24",
+        "phpunit/phpunit": "^9.5"
+    }
 }

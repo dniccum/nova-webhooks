@@ -18,6 +18,7 @@ class ToolServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'nova-webhooks');
+        $this->migrations();
 
         $this->app->booted(function () {
             $this->routes();
@@ -44,6 +45,17 @@ class ToolServiceProvider extends ServiceProvider
                 ->group(__DIR__.'/../routes/api.php');
     }
 
+    protected function migrations()
+    {
+        if ($this->app->runningInConsole()) {
+            if (! class_exists('CreateWebhooksTable')) {
+                $this->publishes([
+                    __DIR__ . '/../database/migrations/create_webhooks_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_webhooks_table.php')
+                ], 'nova-webhooks-migrations');
+            }
+        }
+    }
+
     /**
      * Register any application services.
      *
@@ -51,6 +63,19 @@ class ToolServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->registerAddonConfig();
+    }
+
+    protected function registerAddonConfig() : ToolServiceProvider
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/nova-webhooks.php', 'nova-webhooks');
+        $this->mergeConfigFrom(__DIR__.'/../config/webhook-server.php', 'webhook-server');
+
+        $this->publishes([
+            __DIR__.'/../config/nova-webhooks.php' => config_path('nova-webhooks.php'),
+            __DIR__.'/../config/webhook-server.php' => config_path('webhook-server.php'),
+        ], 'nova-webhooks-config');
+
+        return $this;
     }
 }
