@@ -3,13 +3,10 @@
 namespace Dniccum\NovaWebhooks\Tests\Feature;
 
 use Dniccum\NovaWebhooks\Library\ModelUtility;
-use Dniccum\NovaWebhooks\Models\Webhook;
 use Dniccum\NovaWebhooks\Tests\Models\PageView;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Queue;
 use Dniccum\NovaWebhooks\Tests\TestCase;
-use Spatie\WebhookServer\CallWebhookJob;
 
 class ModelUtilityTest extends TestCase
 {
