@@ -2,6 +2,7 @@
 
 namespace Dniccum\NovaWebhooks\Jobs;
 
+use Dniccum\NovaWebhooks\Enums\ModelEvents;
 use Dniccum\NovaWebhooks\Library\WebhookUtility;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -40,7 +41,7 @@ class DispatchWebhook implements ShouldQueue
      * @param array $payload
      * @return void
      */
-    public function __construct($model, string $action = 'created', array $payload = [])
+    public function __construct($model, string $action = ModelEvents::Created, array $payload = [])
     {
         $this->model = $model;
         $this->action = $action;

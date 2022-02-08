@@ -46,6 +46,7 @@ class TestCase extends OrchestraTestCase
     protected function getPackageProviders($app)
     {
         return [
+            \Dniccum\NovaWebhooks\ToolServiceProvider::class,
             \Spatie\WebhookServer\WebhookServerServiceProvider::class,
         ];
     }

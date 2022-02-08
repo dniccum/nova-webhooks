@@ -18,7 +18,9 @@
     "license": "MIT",
     "require": {
         "php": "^7.4|^8.0",
-        "spatie/laravel-webhook-server": "^2.0"
+        "bensampo/laravel-enum": "^4.2",
+        "spatie/laravel-webhook-server": "^2.0",
+        "symfony/class-loader": "^3.4"
     },
     "autoload": {
         "psr-4": {

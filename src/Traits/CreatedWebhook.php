@@ -2,6 +2,7 @@
 
 namespace Dniccum\NovaWebhooks\Traits;
 
+use Dniccum\NovaWebhooks\Enums\ModelEvents;
 use Dniccum\NovaWebhooks\Library\WebhookUtility;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
@@ -19,7 +20,7 @@ trait CreatedWebhook
              */
             $payload = self::createdWebhookPayload($model);
             $shouldQueue = method_exists($model, 'queueWebhook') && self::queueWebhook();
-            WebhookUtility::executeWebhook($model, 'created', $payload, $shouldQueue);
+            WebhookUtility::executeWebhook($model, ModelEvents::Created, $payload, $shouldQueue);
         });
     }
 
