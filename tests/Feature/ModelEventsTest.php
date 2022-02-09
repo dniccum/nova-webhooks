@@ -144,6 +144,7 @@ class ModelEventsTest extends TestCase
     /**
      * @test
      * @covers \Dniccum\NovaWebhooks\Traits\DeletedWebhook::bootDeletedWebhook
+     * @covers \Dniccum\NovaWebhooks\Traits\DeletedWebhook::deletedWebhookPayload
      */
     public function webhook_fires_with_json_resource()
     {
