@@ -165,6 +165,14 @@ class ModelEventsTest extends TestCase
         $like->save();
         $like->delete();
 
-        Queue::assertPushed(CallWebhookJob::class, 1);
+        Queue::assertPushed(CallWebhookJob::class, function(\Spatie\WebhookServer\CallWebhookJob $job) {
+            $this->assertIsArray($job->payload);
+            $this->assertArrayHasKey('page', $job->payload);
+            $this->assertArrayHasKey('created', $job->payload);
+            $this->assertEquals('Page Like', $job->payload['page']);
+            $this->assertEquals('recently', $job->payload['created']);
+
+            return true;
+        });
     }
 }
