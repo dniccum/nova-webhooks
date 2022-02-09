@@ -18,7 +18,7 @@ trait UpdatedWebhook
              * @param \Illuminate\Database\Eloquent\Model $model
              */
             $payload = self::updatedWebhookPayload($model);
-            WebhookUtility::processWebhooks($model, ModelEvents::Updated, $payload);
+            WebhookUtility::executeWebhook($model, ModelEvents::Updated, $payload);
         });
     }
 

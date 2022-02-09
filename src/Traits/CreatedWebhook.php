@@ -5,7 +5,6 @@ namespace Dniccum\NovaWebhooks\Traits;
 use Dniccum\NovaWebhooks\Enums\ModelEvents;
 use Dniccum\NovaWebhooks\Library\WebhookUtility;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Schema;
 
 trait CreatedWebhook
 {

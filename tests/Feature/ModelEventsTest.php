@@ -140,4 +140,31 @@ class ModelEventsTest extends TestCase
 
         Queue::assertPushed(CallWebhookJob::class, 1);
     }
+
+    /**
+     * @test
+     * @covers \Dniccum\NovaWebhooks\Traits\DeletedWebhook::bootDeletedWebhook
+     */
+    public function webhook_fires_with_json_resource()
+    {
+        Queue::fake();
+
+        Webhook::factory()
+            ->create([
+                'settings' => [
+                    PageLike::class.':'.ModelEvents::Created,
+                    PageLike::class.':'.ModelEvents::Deleted,
+                ]
+            ]);
+
+        $like = PageLike::factory()
+            ->create();
+
+        $like->page = 'new name';
+
+        $like->save();
+        $like->delete();
+
+        Queue::assertPushed(CallWebhookJob::class, 1);
+    }
 }

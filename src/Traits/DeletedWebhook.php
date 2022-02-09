@@ -18,7 +18,7 @@ trait DeletedWebhook
              * @param \Illuminate\Database\Eloquent\Model $model
              */
             $payload = self::deletedWebhookPayload($model);
-            WebhookUtility::processWebhooks($model, ModelEvents::Deleted, $payload);
+            WebhookUtility::executeWebhook($model, ModelEvents::Deleted, $payload);
         });
     }
 
