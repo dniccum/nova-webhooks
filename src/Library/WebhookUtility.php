@@ -21,16 +21,11 @@ class WebhookUtility
      * @return void
      * @throws \Exception
      */
-    public static function executeWebhook($model, string $action = ModelEvents::Created, $payload = [], $dispatchViaJob = false) : void
+    public static function executeWebhook($model, string $action = ModelEvents::Created, $payload = []) : void
     {
         if ($payload instanceof JsonResource) {
             $request = new Request();
             $payload = $payload->toArray($request);
-        } elseif (ModelEvents::isNot($action)) {
-            throw new \Exception(
-                'Please provide a valid model event: created, updated, deleted', // TODO add translation
-                500
-            );
         } elseif (!is_array($payload)) {
             throw new \Exception(
                 'Please provide either a valid array or an instance of a JsonResource.', // TODO add translation
@@ -38,7 +33,8 @@ class WebhookUtility
             );
         }
 
-        if ($dispatchViaJob) {
+        $shouldQueue = method_exists($model, 'queueWebhook') && $model::queueWebhook();
+        if ($shouldQueue) {
             $jobToUse = $model::$job;
             dispatch(new $jobToUse($model, $action, $payload));
         } else {

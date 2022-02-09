@@ -2,7 +2,9 @@
 
 namespace Dniccum\NovaWebhooks\Tests\Feature;
 
+use Dniccum\NovaWebhooks\Enums\ModelEvents;
 use Dniccum\NovaWebhooks\Models\Webhook;
+use Dniccum\NovaWebhooks\Tests\Models\Api\PageLike;
 use Dniccum\NovaWebhooks\Tests\Models\PageView;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -27,7 +29,7 @@ class ModelEventsTest extends TestCase
         Webhook::factory()
             ->create([
                 'settings' => [
-                    PageView::class.':created'
+                    PageView::class.':'.ModelEvents::Created
                 ]
             ]);
 
@@ -50,7 +52,7 @@ class ModelEventsTest extends TestCase
         Webhook::factory()
             ->create([
                 'settings' => [
-                    PageView::class.':updated'
+                    PageView::class.':'.ModelEvents::Updated
                 ]
             ]);
 
@@ -59,5 +61,83 @@ class ModelEventsTest extends TestCase
 
         $this->assertDatabaseCount('page_views', 1);
         Queue::assertNotPushed(CallWebhookJob::class);
+    }
+
+    /**
+     * @test
+     */
+    public function webhook_with_invalid_model_is_skipped()
+    {
+        Queue::fake();
+
+        Webhook::factory()
+            ->create([
+                'settings' => [
+                    'Dniccum\NovaWebhooks\Tests\Models\User'.':'.ModelEvents::Created
+                ]
+            ]);
+
+        PageView::factory()
+            ->create();
+
+        Queue::assertPushed(PageView::$job);
+        Queue::assertNotPushed(CallWebhookJob::class);
+    }
+
+    /**
+     * @test
+     * @covers \Dniccum\NovaWebhooks\Traits\UpdatedWebhook::bootUpdatedWebhook
+     */
+    public function nested_webhook_fires_upon_model_update()
+    {
+        Queue::fake();
+
+        $like = PageLike::factory()
+            ->create();
+
+        Webhook::factory()
+            ->create([
+                'settings' => [
+                    PageView::class.':updated',
+                    PageLike::class.':updated',
+                ]
+            ]);
+
+        Webhook::factory()
+            ->create([
+                'settings' => [
+                    PageLike::class.':'.ModelEvents::Updated,
+                ]
+            ]);
+
+        $this->assertDatabaseCount('page_likes', 1);
+
+        $like->page = $this->faker->firstName();
+        $like->save();
+
+        Queue::assertPushed(CallWebhookJob::class, 2);
+    }
+
+    /**
+     * @test
+     * @covers \Dniccum\NovaWebhooks\Traits\DeletedWebhook::bootDeletedWebhook
+     */
+    public function webhook_fires_upon_model_deletion()
+    {
+        Queue::fake();
+
+        $like = PageLike::factory()
+            ->create();
+
+        Webhook::factory()
+            ->create([
+                'settings' => [
+                    PageLike::class.':'.ModelEvents::Deleted,
+                ]
+            ]);
+
+        $like->delete();
+
+        Queue::assertPushed(CallWebhookJob::class, 1);
     }
 }

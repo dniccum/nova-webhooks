@@ -16,12 +16,13 @@ class ModelUtilityTest extends TestCase
     /**
      * @test
      * @covers \Dniccum\NovaWebhooks\Library\ModelUtility::availableModelActions
+     * @covers \Dniccum\NovaWebhooks\Library\ModelUtility::getModels
      */
     public function can_retrieve_all_of_the_available_models()
     {
         $actions = ModelUtility::availableModelActions();
 
-        $this->assertCount(1, $actions);
-        $this->assertEquals(PageView::class, $actions[0]->name);
+        $this->assertCount(2, $actions);
+        $this->assertStringContainsString(PageView::class, $actions[1]->name);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Dniccum\NovaWebhooks\Traits;
 
+use Dniccum\NovaWebhooks\Enums\ModelEvents;
 use Dniccum\NovaWebhooks\Library\WebhookUtility;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,12 +14,11 @@ trait DeletedWebhook
     public static function bootDeletedWebhook() : void
     {
         static::deleted(function ($model) {
-            $payload = self::deletedWebhookPayload($model);
-
             /**
              * @param \Illuminate\Database\Eloquent\Model $model
              */
-            WebhookUtility::executeWebhook($model, 'deleted', $payload);
+            $payload = self::deletedWebhookPayload($model);
+            WebhookUtility::processWebhooks($model, ModelEvents::Deleted, $payload);
         });
     }
 

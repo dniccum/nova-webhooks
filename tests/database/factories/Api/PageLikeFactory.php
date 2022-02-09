@@ -1,18 +1,18 @@
 <?php
 
-namespace Dniccum\NovaWebhooks\Tests\Database\Factories;
+namespace Dniccum\NovaWebhooks\Tests\Database\Factories\Api;
 
-use Dniccum\NovaWebhooks\Tests\Models\PageView;
+use Dniccum\NovaWebhooks\Tests\Models\Api\PageLike;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PageViewFactory extends Factory
+class PageLikeFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = PageView::class;
+    protected $model = PageLike::class;
 
     /**
      * Define the model's default state.
@@ -22,8 +22,7 @@ class PageViewFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->domainName(),
-            'number_of_views' => $this->faker->numberBetween(3, 100),
+            'page' => $this->faker->text(),
         ];
     }
 }

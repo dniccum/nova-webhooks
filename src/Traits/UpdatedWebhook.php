@@ -2,6 +2,7 @@
 
 namespace Dniccum\NovaWebhooks\Traits;
 
+use Dniccum\NovaWebhooks\Enums\ModelEvents;
 use Dniccum\NovaWebhooks\Library\WebhookUtility;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,12 +14,11 @@ trait UpdatedWebhook
     public static function bootUpdatedWebhook() : void
     {
         static::updated(function ($model) {
-            $payload = self::updatedWebhookPayload($model);
-
             /**
              * @param \Illuminate\Database\Eloquent\Model $model
              */
-            WebhookUtility::executeWebhook($model, 'updated', $payload);
+            $payload = self::updatedWebhookPayload($model);
+            WebhookUtility::processWebhooks($model, ModelEvents::Updated, $payload);
         });
     }
 

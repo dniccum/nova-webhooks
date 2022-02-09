@@ -19,8 +19,7 @@ trait CreatedWebhook
              * @param \Illuminate\Database\Eloquent\Model $model
              */
             $payload = self::createdWebhookPayload($model);
-            $shouldQueue = method_exists($model, 'queueWebhook') && self::queueWebhook();
-            WebhookUtility::executeWebhook($model, ModelEvents::Created, $payload, $shouldQueue);
+            WebhookUtility::executeWebhook($model, ModelEvents::Created, $payload);
         });
     }
 
