@@ -25,6 +25,6 @@ class NovaWebhooks extends Tool
      */
     public function renderNavigation()
     {
-        return view('nova-webhooks::navigation');
+//        return view('nova-webhooks::navigation');
     }
 }

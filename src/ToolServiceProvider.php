@@ -4,6 +4,7 @@ namespace Dniccum\NovaWebhooks;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Inspheric\Fields\UrlFieldServiceProvider;
 use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Nova;
 use Dniccum\NovaWebhooks\Http\Middleware\Authorize;
@@ -18,7 +19,8 @@ class ToolServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'nova-webhooks');
-        $this->migrations();
+        $this->migrations()
+            ->novaResources();
 
         $this->app->booted(function () {
             $this->routes();
@@ -55,6 +57,20 @@ class ToolServiceProvider extends ServiceProvider
                 ], 'nova-webhooks-migrations');
             }
         }
+
+        return $this;
+    }
+
+    protected function novaResources()
+    {
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'nova-webhooks');
+
+        $this->publishes([
+            __DIR__ . '/Nova/Webhook.php.stub' => app_path('Nova/Webhook.php'),
+            __DIR__ . '/../resources/lang' => resource_path('lang/vendor/nova-webhooks'),
+        ], 'nova-webhooks-resources');
+
+        return $this;
     }
 
     /**

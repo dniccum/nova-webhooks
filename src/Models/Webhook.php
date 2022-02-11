@@ -2,6 +2,7 @@
 
 namespace Dniccum\NovaWebhooks\Models;
 
+use App\Models\User;
 use Dniccum\NovaWebhooks\Database\Factories\WebhookFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +25,7 @@ class Webhook extends Model
         parent::boot();
 
         static::creating(function(\Dniccum\NovaWebhooks\Models\Webhook $webhook) {
-            $webhook->modified_by = optional(\Auth::user())->primaryKey;
+            $webhook->modified_by = \Auth::id();
             if (!$webhook->secret) {
                 $webhook->secret = self::newSecret();
             }
@@ -32,6 +33,14 @@ class Webhook extends Model
         static::updating(function(\Dniccum\NovaWebhooks\Models\Webhook $webhook) {
             $webhook->modified_by = optional(\Auth::user())->primaryKey;
         });
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function modifiedBy()
+    {
+        return $this->belongsTo(config('auth.providers.users.model'), 'modified_by', 'id');
     }
 
     /**
