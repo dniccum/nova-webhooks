@@ -2,9 +2,10 @@
 
 namespace Dniccum\NovaWebhooks;
 
+use Dniccum\NovaWebhooks\Library\ModelUtility;
+use Dniccum\NovaWebhooks\Library\WebhookUtility;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Inspheric\Fields\UrlFieldServiceProvider;
 use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Nova;
 use Dniccum\NovaWebhooks\Http\Middleware\Authorize;
@@ -81,6 +82,13 @@ class ToolServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerAddonConfig();
+
+        $this->app->bind('webhooks', function() {
+            return new WebhookUtility;
+        });
+        $this->app->bind('webhook-models', function() {
+            return new ModelUtility;
+        });
     }
 
     protected function registerAddonConfig() : ToolServiceProvider
