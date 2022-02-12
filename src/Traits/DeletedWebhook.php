@@ -6,8 +6,14 @@ use Dniccum\NovaWebhooks\Enums\ModelEvents;
 use Dniccum\NovaWebhooks\Library\WebhookUtility;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Executes a webhook when the extended model is emits a "deleted" event
+ * @package dniccum/nova-webhooks
+ */
 trait DeletedWebhook
 {
+    use WebhookModelLabel;
+
     /**
      * @return void
      */
