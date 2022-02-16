@@ -8,6 +8,7 @@ return [
     'name_placeholder' => 'A helpful title',
     'last_modified_by' => 'Last Modified By',
     'no_actions_available' => 'You currently do not have any actions available. Please add the necessary traits to your application\'s models to select actions for this webhook.',
+    'no_models_available' => 'You do not have any records available to test the requested ":model" model. Please either select a different test or add a record.',
     'secret' => 'Secret',
     'secret_help' => 'If necessary provide a secret that will be used to validate this hook. If not, one will be generated for you during creation.',
     'select_hook_to_test' => 'Select a webhook to test',

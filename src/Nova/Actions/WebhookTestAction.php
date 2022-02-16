@@ -79,6 +79,10 @@ class WebhookTestAction extends Action
             $actionName = \Str::after($webhookAction, ':');
             $actionName = ModelEvents::fromValue($actionName);
 
+            if (empty($webhookModel)) {
+                return Action::danger(__('nova-webhooks::nova.no_models_available', [ 'model' => $class ]));
+            }
+
             if ($actionName->is(ModelEvents::Created)) {
                 $class::createdWebhook($webhookModel);
             } elseif ($actionName->is(ModelEvents::Updated)) {
