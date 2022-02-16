@@ -20,12 +20,22 @@ trait DeletedWebhook
     public static function bootDeletedWebhook() : void
     {
         static::deleted(function ($model) {
-            /**
-             * @param \Illuminate\Database\Eloquent\Model $model
-             */
-            $payload = self::deletedWebhookPayload($model);
-            WebhookUtility::executeWebhook($model, ModelEvents::Deleted, $payload);
+            self::deletedWebhook($model);
         });
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @return void
+     * @throws \Exception
+     */
+    public static function deletedWebhook($model)
+    {
+        /**
+         * @param \Illuminate\Database\Eloquent\Model $model
+         */
+        $payload = self::deletedWebhookPayload($model);
+        WebhookUtility::executeWebhook($model, ModelEvents::Deleted, $payload);
     }
 
     /**

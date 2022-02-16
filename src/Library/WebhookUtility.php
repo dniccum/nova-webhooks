@@ -83,10 +83,12 @@ class WebhookUtility
     public static function getWebhooks($query)
     {
         if (DB::getDriverName() !== 'sqlite') {
-            return Webhook::whereJsonContains('settings', $query)->get();
+            return Webhook::whereJsonContains('settings', [ '\\'.$query => true ])
+                ->orWhereJsonContains('settings', [ $query => true ])
+                ->get();
         } else {
             return Webhook::all()->filter(function(Webhook $webhook) use ($query) {
-                return in_array($query, $webhook->settings);
+                return in_array($query, $webhook->settings) || in_array('\\'.$query, $webhook->settings);
             })->values();
         }
     }

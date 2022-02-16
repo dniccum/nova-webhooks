@@ -20,12 +20,19 @@ trait CreatedWebhook
     public static function bootCreatedWebhook() : void
     {
         static::created(function ($model) {
-            /**
-             * @param \Illuminate\Database\Eloquent\Model $model
-             */
-            $payload = self::createdWebhookPayload($model);
-            WebhookUtility::executeWebhook($model, ModelEvents::Created, $payload);
+            self::createdWebhook($model);
         });
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @return void
+     * @throws \Exception
+     */
+    public static function createdWebhook($model)
+    {
+        $payload = self::createdWebhookPayload($model);
+        WebhookUtility::executeWebhook($model, ModelEvents::Created, $payload);
     }
 
     /**

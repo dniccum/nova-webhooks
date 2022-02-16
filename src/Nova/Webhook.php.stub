@@ -2,8 +2,10 @@
 
 namespace App\Nova;
 
+use Dniccum\NovaWebhooks\Nova\Actions\WebhookTestAction;
 use Dniccum\NovaWebhooks\Nova\WebhookResource;
 use Illuminate\Http\Request;
+use Inspheric\Fields\Url;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
@@ -27,17 +29,11 @@ class Webhook extends WebhookResource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-//            TODO figure out resolution
-//            self::$urlField::make('Url', 'url')
-//                ->help('The url or "recipient" of the webhook when it is dispatched by this application.')
-//                ->sortable()
-//                ->clickable(false)
-//                ->rules('url', 'required'),
-
-            Text::make(__('nova-webhooks::nova.url'), 'url')
+            Url::make(__('nova-webhooks::nova.url'), 'url')
                 ->help(__('nova-webhooks::nova.url_help'))
                 ->placeholder('https://hooks.zapier.com/hooks/catch/abcd1234')
                 ->sortable()
+                ->clickable(false)
                 ->rules('required', 'url'),
 
             Text::make(__('nova-webhooks::nova.secret'), 'secret')
@@ -47,9 +43,26 @@ class Webhook extends WebhookResource
                 ->updateRules('required', 'string')
                 ->creationRules('nullable', 'string'),
 
+            $this->optionGroup()
+                ->help(__('nova-webhooks::nova.available_actions_help')),
+
             BelongsTo::make(__('nova-webhooks::nova.last_modified_by'), 'modifiedBy', User::class)
                 ->exceptOnForms()
                 ->readonly(),
+        ];
+    }
+
+    /**
+     * Get the actions available for the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function actions(Request $request)
+    {
+        return [
+            (new WebhookTestAction($this->model()))
+                ->confirmButtonText(__('nova-webhooks::nova.test')),
         ];
     }
 }

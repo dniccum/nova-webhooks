@@ -43,6 +43,31 @@ class ModelUtility
         return $models;
     }
 
+    /**
+     * @param array $settings
+     * @return WebhookModel[]
+     */
+    public static function parseSavedList(array $settings) : array
+    {
+        $models = [];
+
+        foreach($settings as $action => $selected) {
+            if ($selected) {
+                $class = \Str::before($action, ':');
+                $actionName = \Str::after($action, ':');
+                $model = new WebhookModel($class);
+                $models[$action] = $model->label.':'.$actionName;
+            }
+        }
+
+        return $models;
+    }
+
+    /**
+     * Returns all the available models in the application's namespace
+     *
+     * @return Collection
+     */
     public static function getModels(): Collection
     {
         $modelFiles = File::allFiles(self::path());
@@ -71,6 +96,27 @@ class ModelUtility
     }
 
     /**
+     * Compile the available models and actions to select for the webhook
+     *
+     * @return array
+     */
+    public static function fieldArray() : array
+    {
+        $models = self::availableModelActions();
+        $array = [];
+
+        foreach($models as $model) {
+            foreach($model->actions as $action) {
+                $array[$model->actionName($action)] = $model->label($action);
+            }
+        }
+
+        return collect($array)
+            ->sort()
+            ->all();
+    }
+
+    /**
      * @return string
      */
     private static function path() : string
@@ -82,6 +128,9 @@ class ModelUtility
         return app_path();
     }
 
+    /**
+     * @return string
+     */
     private static function namespace()
     {
         if (\App::runningUnitTests()) {

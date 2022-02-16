@@ -20,6 +20,7 @@
         "php": "^7.4|^8.0",
         "bensampo/laravel-enum": "^4.2",
         "inspheric/nova-url-field": "^1.4",
+        "owenmelbz/nova-radio-field": "^1.0",
         "spatie/laravel-webhook-server": "^2.0",
         "symfony/class-loader": "^3.4"
     },

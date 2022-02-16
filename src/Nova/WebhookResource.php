@@ -2,8 +2,12 @@
 
 namespace Dniccum\NovaWebhooks\Nova;
 
+use Dniccum\NovaWebhooks\Facades\WebhookModels;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BooleanGroup;
+use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
 use Laravel\Nova\Resource as NovaResource;
 
 abstract class WebhookResource extends NovaResource
@@ -43,6 +47,23 @@ abstract class WebhookResource extends NovaResource
         parent::__construct($resource);
     }
 
+    protected function optionGroup()
+    {
+        $array = WebhookModels::fieldArray();
+
+        return (new Panel(__('nova-webhooks::nova.available_actions'), [
+            count($array) > 0
+                ?
+                (BooleanGroup::make(__('nova-webhooks::nova.settings'), 'settings')
+                    ->hideFromIndex()
+                    ->options(
+                        $array
+                    ))
+                :
+                Heading::make('<p class="text-danger">'.__('nova-webhooks::nova.no_actions_available').'</p>')->asHtml()
+        ]));
+    }
+
     /**
      * Get the cards available for the request.
      *
@@ -72,17 +93,6 @@ abstract class WebhookResource extends NovaResource
      * @return array
      */
     public function lenses(Request $request)
-    {
-        return [];
-    }
-
-    /**
-     * Get the actions available for the resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function actions(Request $request)
     {
         return [];
     }

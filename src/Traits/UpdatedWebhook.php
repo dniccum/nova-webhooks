@@ -20,12 +20,19 @@ trait UpdatedWebhook
     public static function bootUpdatedWebhook() : void
     {
         static::updated(function ($model) {
-            /**
-             * @param \Illuminate\Database\Eloquent\Model $model
-             */
-            $payload = self::updatedWebhookPayload($model);
-            WebhookUtility::executeWebhook($model, ModelEvents::Updated, $payload);
+            self::updatedWebhook($model);
         });
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @return void
+     * @throws \Exception
+     */
+    public static function updatedWebhook($model)
+    {
+        $payload = self::updatedWebhookPayload($model);
+        WebhookUtility::executeWebhook($model, ModelEvents::Updated, $payload);
     }
 
     /**

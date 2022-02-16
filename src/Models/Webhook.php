@@ -31,7 +31,7 @@ class Webhook extends Model
             }
         });
         static::updating(function(\Dniccum\NovaWebhooks\Models\Webhook $webhook) {
-            $webhook->modified_by = optional(\Auth::user())->primaryKey;
+            $webhook->modified_by = \Auth::id();
         });
     }
 
