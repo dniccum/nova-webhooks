@@ -184,6 +184,8 @@ public static function webhookLabel() : string
 }
 ```
 
+Setting the label to *App Users* will show the following in the Nova action: `App Users:updated`.
+
 ### Webhook Resource
 
 The resource that is part of this tool will automatically be registered within Nova due to the trait that was added in the previous step.
