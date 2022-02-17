@@ -2,7 +2,7 @@
 
 A Laravel Nova tool that allows users to create and manage webhooks based on Eloquent Model events.
 
-![Nova Webhooks](https://github.com/dniccum/nova-webhooks/blob/master/assets/nova-webhooks-social-image.png?raw=true)
+![Nova Webhooks](https://github.com/dniccum/nova-webhooks/blob/main/assets/nova-webhooks-social-image.png?raw=true)
 
 [![Latest Version on Packagist](https://poser.pugx.org/dniccum/nova-webhooks/v/stable?format=flat-square&color=#0E7FC0)](https://packagist.org/packages/dniccum/nova-webhooks)
 [![License](https://poser.pugx.org/dniccum/nova-webhooks/license?format=flat-square)](https://packagist.org/packages/dniccum/nova-webhooks)
