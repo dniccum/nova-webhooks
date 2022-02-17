@@ -10,6 +10,16 @@ A Laravel Nova tool that allows users to create and manage webhooks based on Elo
 
 A tool for Laravel's Nova administrator panel that enables users to create webhooks that can be customized to fire on specified Eloquent model events (created, updated, etc). This allows applications to communicate with other applications and integrations (Zapier, If This Then That, etc).
 
+## Table of Contents
+
+* [Installation](#installation)
+* [Configuration](#configuration)
+* [Using the Tool](#using-the-tool)
+  * [Model Traits](#model-traits) 
+  * [Customizing the Payload](#customizing-the-payload)
+  * [Model Label](#model-label)
+* [Testing](#testing)
+
 ## Installation
 
 You can install the package via composer:
@@ -72,7 +82,107 @@ public function tools()
 }
 ```
 
+## Configuration
+
+Two different configuration files are published with this package; one for this package (`nova-webhooks.php`) and one for the webhook server (`webhook-server.php`) that this package utilizes.
+
+This package relies on [Spatie's webhook server package](https://github.com/spatie/laravel-webhook-server) to dispatch each webhook request. Feel free to configure the server to your needs using the associated documentation. 
+
 ## Using the Tool
+
+### Model Traits
+
+The main functionality of this tool is to listen to native Eloquent model events and passes a JSON-serialized payload of that model's attributes. A series traits are available for you to enable different actions and customize that hook's payload. 
+
+This package provides 4 different traits that you can add to each of your Eloquent models:
+
+- `Dniccum\NovaWebhooks\Traits\CreatedWebhook`
+- `Dniccum\NovaWebhooks\Traits\UpdatedWebhook`
+- `Dniccum\NovaWebhooks\Traits\DeletedWebhook`
+- `Dniccum\NovaWebhooks\Traits\AllWebhooks`
+
+Each trait, with exception for the last (which is a shortcut to include all available traits), is associated with the event that it listens for; `CreatedWebhook` for the created Eloquent event and so on and so forth.
+
+#### Customizing the Payload
+
+Additionally each trait provides a corresponding method to modify the payload that is sent with each webhook. See below for the name of the trait with the matching name of the method:
+
+| Trait             | Method                  |
+|-------------------|-------------------------|
+| `CreatedWebhook`  | `createdWebhookPayload` |
+| `UpdatedWebhook`  | `updatedWebhookPayload` |
+| `DeleteddWebhook` | `deletedWebhookPayload` |
+
+By default, this package will send a serialized array of the model that extends one of these traits. However you do have the ability to modify this behavior.
+
+##### Custom Array
+
+Return an associative array of valid key/value pairs based on the `$model` parameter.
+
+```php
+protected static function createdWebhookPayload($model)
+{
+    return [
+        'id' => $model->id,
+        'name' => $model->first_name.' '.$model->last_name,
+        'email' => $model->email,
+        // And so on
+    ];
+}
+```
+
+##### JSON Resource
+
+You also have the ability to return a [Laravel-generated JSON resource](https://laravel.com/docs/9.x/eloquent-resources) and customize this object to your liking:
+
+**JSON Resource**
+
+```php
+class PageLikeResource extends \Illuminate\Http\Resources\Json\JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->first_name.' '.$this->last_name,
+            'email' => $this->email,
+        ];
+    }
+}
+```
+
+**Eloquent Model**
+
+```php
+protected static function createdWebhookPayload($model)
+{
+    return new PageLikeResource($model);
+}
+```
+
+#### Model Label
+
+Each trait also exposes a method that will configure how the model displays within the Nova interface. By default Nova will show the namespaced string of the Model followed by the associated action; for instance `App\Models\User:updated`.
+
+If you would like to change it to something else a little more user-friendly, or even use a translation key, you can modify it like so:
+
+```php
+/**
+ * The name of the model that will be applied to the webhook
+ *
+ * @return string
+ */
+public static function webhookLabel() : string
+{
+    return 'App Users';
+}
+```
 
 ### Webhook Resource
 
