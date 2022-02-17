@@ -55,7 +55,7 @@ class ToolServiceProvider extends ServiceProvider
             if (! class_exists('CreateWebhooksTable')) {
                 $this->publishes([
                     __DIR__ . '/../database/migrations/create_webhooks_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_webhooks_table.php')
-                ], 'nova-webhooks-migrations');
+                ], 'nova-webhooks');
             }
         }
 
@@ -67,9 +67,8 @@ class ToolServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'nova-webhooks');
 
         $this->publishes([
-            __DIR__ . '/Nova/Webhook.php.stub' => app_path('Nova/Webhook.php'),
             __DIR__ . '/../resources/lang' => resource_path('lang/vendor/nova-webhooks'),
-        ], 'nova-webhooks-resources');
+        ], 'nova-webhooks');
 
         return $this;
     }

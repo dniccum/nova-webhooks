@@ -23,6 +23,10 @@ class WebhookUtility
      */
     public static function executeWebhook($model, string $action = ModelEvents::Created, $payload = []) : void
     {
+        if (!config('nova-webhooks.enabled')) {
+            return;
+        }
+
         if ($payload instanceof JsonResource) {
             $request = new Request();
             $payload = $payload->toArray($request);

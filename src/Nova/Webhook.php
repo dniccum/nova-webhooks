@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Nova;
+namespace Dniccum\NovaWebhooks\Nova;
 
 use Dniccum\NovaWebhooks\Nova\Actions\WebhookTestAction;
-use Dniccum\NovaWebhooks\Nova\WebhookResource;
 use Illuminate\Http\Request;
 use Inspheric\Fields\Url;
 use Laravel\Nova\Fields\BelongsTo;
@@ -46,7 +45,7 @@ class Webhook extends WebhookResource
             $this->optionGroup()
                 ->help(__('nova-webhooks::nova.available_actions_help')),
 
-            BelongsTo::make(__('nova-webhooks::nova.last_modified_by'), 'modifiedBy', User::class)
+            BelongsTo::make(__('nova-webhooks::nova.last_modified_by'), 'modifiedBy', config('auth.providers.users.model'))
                 ->exceptOnForms()
                 ->readonly(),
         ];
