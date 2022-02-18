@@ -59,6 +59,7 @@ abstract class WebhookResource extends NovaResource
                     ->options(
                         $array
                     ))
+                    ->required()
                 :
                 Heading::make('<p class="text-danger">'.__('nova-webhooks::nova.no_actions_available').'</p>')->asHtml()
         ]));

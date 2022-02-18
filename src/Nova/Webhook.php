@@ -4,7 +4,6 @@ namespace Dniccum\NovaWebhooks\Nova;
 
 use Dniccum\NovaWebhooks\Nova\Actions\WebhookTestAction;
 use Illuminate\Http\Request;
-use Inspheric\Fields\Url;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
@@ -28,18 +27,17 @@ class Webhook extends WebhookResource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Url::make(__('nova-webhooks::nova.url'), 'url')
+            Text::make(__('nova-webhooks::nova.url'), 'url')
                 ->help(__('nova-webhooks::nova.url_help'))
                 ->placeholder('https://hooks.zapier.com/hooks/catch/abcd1234')
                 ->sortable()
-                ->clickable(false)
                 ->rules('required', 'url'),
 
             Text::make(__('nova-webhooks::nova.secret'), 'secret')
                 ->help(__('nova-webhooks::nova.secret_help'))
                 ->hideFromIndex()
                 ->placeholder(null)
-                ->updateRules('required', 'string')
+                ->updateRules('required', 'string', 'min:10', 'max:100')
                 ->creationRules('nullable', 'string'),
 
             $this->optionGroup()
