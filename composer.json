@@ -1,6 +1,6 @@
 {
     "name": "dniccum/nova-webhooks",
-    "description": "A Laravel Nova tool.",
+    "description": "A tool for Laravel's Nova administrator panel that enables users to create webhooks that can be customized to fire on specified Eloquent model events (created, updated, etc). This allows applications to communicate with other applications and integrations (Zapier, If This Then That, etc).",
     "keywords": [
         "laravel",
         "nova",
