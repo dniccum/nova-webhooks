@@ -19,7 +19,6 @@
     "require": {
         "php": "^7.4|^8.0",
         "bensampo/laravel-enum": "^4.2",
-        "inspheric/nova-url-field": "^1.4",
         "owenmelbz/nova-radio-field": "^1.0",
         "spatie/laravel-webhook-server": "^2.0",
         "symfony/class-loader": "^3.4"
@@ -27,8 +26,7 @@
     "autoload": {
         "psr-4": {
             "Dniccum\\NovaWebhooks\\": "src/",
-            "Spatie\\WebhookServer\\": "src/",
-            "Inspheric\\Fields\\": "src/"
+            "Spatie\\WebhookServer\\": "src/"
         }
     },
     "autoload-dev": {

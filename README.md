@@ -14,11 +14,17 @@ A tool for Laravel's Nova administrator panel that enables users to create webho
 
 * [Installation](#installation)
 * [Configuration](#configuration)
-* [Using the Tool](#using-the-tool)
+* [Implementing the Tool](#implementing-the-tool)
+  * [Nova Resource](#nova-resource) 
   * [Model Traits](#model-traits) 
   * [Customizing the Payload](#customizing-the-payload)
   * [Model Label](#model-label)
-* [Testing](#testing)
+  * [Sending Webhooks to a Queue](#sending-webhooks-to-a-queue)
+* [Using the Tool](#using-the-tool)
+  * [Webhook Secret](#webhook-secret) 
+  * [Authorization](#authorization) 
+  * [Testing Action](#testing-action)
+* [Testing and Development](#testing-and-development)
 
 ## Installation
 
@@ -88,7 +94,13 @@ Two different configuration files are published with this package; one for this 
 
 This package relies on [Spatie's webhook server package](https://github.com/spatie/laravel-webhook-server) to dispatch each webhook request. Feel free to configure the server to your needs using the associated documentation. 
 
-## Using the Tool
+## Implementing the Tool
+
+While this package is not necessarily "plug-and-play," it has been designed to only require minor amounts of code to get your webhooks up and running.
+
+### Nova Resource
+
+The Webhook resource that is part of this tool will automatically be registered within Nova due to the trait that was added during setup process.
 
 ### Model Traits
 
@@ -105,7 +117,7 @@ Each trait, with exception for the last (which is a shortcut to include all avai
 
 #### Customizing the Payload
 
-Additionally each trait provides a corresponding method to modify the payload that is sent with each webhook. See below for the name of the trait with the matching name of the method:
+Additionally, each trait provides a corresponding method to modify the payload that is sent with each webhook. See below for the name of the trait with the matching name of the method:
 
 | Trait             | Method                  |
 |-------------------|-------------------------|
@@ -186,11 +198,67 @@ public static function webhookLabel() : string
 
 Setting the label to *App Users* will show the following in the Nova action: `App Users:updated`.
 
-### Webhook Resource
+#### Sending Webhooks to a Queue
 
-The resource that is part of this tool will automatically be registered within Nova due to the trait that was added in the previous step.
+When an Eloquent Model executes a webhook call, the [webhook server package](https://github.com/spatie/laravel-webhook-server#usage) that helps power this tool will automatically send the webhook to the configured queue. In the case that you might be hydrating additional relationships and/or other logic while generating your payload, it might be more performant to send the execution of the webhook to the queue as well.
 
-## Testing
+To do this, simply add the `ShouldQueueWebhook` trait to the top of your model, like so:
+
+```php
+use Dniccum\NovaWebhooks\Jobs\DispatchWebhook;
+
+class PageLike extends \Illuminate\Database\Eloquent\Model
+{
+    use ShouldQueueWebhook
+    
+    ...
+}
+```
+
+This adds both a property and an additional method to your model:
+
+```php
+/**
+ * The job class that should be used to dispatch this model's webhook
+ *
+ * @var string
+ */
+public static $job = DispatchWebhook::class;
+
+/**
+ * @return bool
+ */
+public static function queueWebhook() : bool
+{
+    return true;
+}
+```
+
+The property gives you the ability to override the Job class that is called when executing the webhook. For most cases this should not have to be changed, but it is available if necessary. Furthermore, you also have the ability to write custom logic to whether or not send the webhook to the queue at all. Again, most likely you shouldn't have to change this.
+
+## Using the Tool
+
+### Webhook Secret
+
+The fields that the "baked-in" Webhook resource provides are relatively self-explanatory. All fields are required except for the hook's secret key. This will be auto-generated for you if you do not provide one your self. In most cases, your webhooks will not need a secret key for validation; both Zapier and IFTTT do not require any authorization.
+
+In the circumstance that you are using a package/service like [Spatie's webhook client](https://github.com/spatie/laravel-webhook-client), it is usually recommended (per their documentation) that you use a key authorize your application's webhook endpoints to prevent any unwanted requests. Again, you can either use the auto-generated hash that this package provides, or you can enter your own.
+
+### Authorization
+
+Due to the fact the Webhook resource that is made available to the application via this package, you can provide user/role authorization using a [conventional Eloquent Model policy](https://laravel.com/docs/9.x/authorization#policy-methods). Refer to the [Nova documentation](https://nova.laravel.com/docs/3.0/resources/authorization.html) for additional information.
+
+### Testing Action
+
+Probably the most important part of any webhook is testing and validation that your webhook is working correctly and providing the necessary information to the prescribed endpoint. This package gives you the ability to do such an action based on the Eloquent events that you have selected for this webhook. Simply select the hook that you want to test and then utilize the Nova Actions toolbar or the inline button to launch the testing action, and then indicate which model and corresponding model event that you want to test. 
+
+![Action Modal](https://github.com/dniccum/nova-webhooks/blob/main/assets/action-modal.png?raw=true)
+
+#### Sample Data
+
+When you want execute a test, this package will pull a random entry in the selected model's table in your database and use it as the subject for your webhook. If you don't have any records available yet, the action will throw an error instructing you to add the necessary records before you proceed.
+
+## Testing and Development
 
 To perform the necessary PHP Unit tests using the Orchestra Workbench, clone the repository, install the necessary dependencies with `composer install` and run the PHP Unit testing suite:
 
