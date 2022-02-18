@@ -45,7 +45,7 @@ class Webhook extends WebhookResource
             $this->optionGroup()
                 ->help(__('nova-webhooks::nova.available_actions_help')),
 
-            BelongsTo::make(__('nova-webhooks::nova.last_modified_by'), 'modifiedBy', config('auth.providers.users.model'))
+            BelongsTo::make(__('nova-webhooks::nova.last_modified_by'), 'modifiedBy', config('nova-webhooks.users.resource'))
                 ->exceptOnForms()
                 ->readonly(),
         ];
