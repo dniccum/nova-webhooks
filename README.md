@@ -13,6 +13,8 @@ A tool for Laravel's Nova administrator panel that enables users to create webho
 ## Table of Contents
 
 * [Installation](#installation)
+  * [Migrations](#migrations) 
+  * [File Additions](#file-additions) 
 * [Configuration](#configuration)
 * [Implementing the Tool](#implementing-the-tool)
   * [Nova Resource](#nova-resource) 
@@ -45,6 +47,16 @@ Doing this action will add the following items:
 - migrations
 - configuration files *(Note: there will be two)*
 - translations
+
+### Migrations
+
+Perform your database migrations via artisan command:
+
+```bash
+php artisan migrate
+```
+
+### File Additions
 
 There are two things that you will need to add to your application's `NovaServiceProvider.php`:
 
