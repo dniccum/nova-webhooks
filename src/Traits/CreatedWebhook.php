@@ -26,13 +26,14 @@ trait CreatedWebhook
 
     /**
      * @param \Illuminate\Database\Eloquent\Model $model
+     * @param boolean $isTest If the webhook is running as a test through the testing action
      * @return void
      * @throws \Exception
      */
-    public static function createdWebhook($model)
+    public static function createdWebhook($model, bool $isTest = false)
     {
         $payload = self::createdWebhookPayload($model);
-        WebhookUtility::executeWebhook($model, ModelEvents::Created, $payload);
+        WebhookUtility::executeWebhook($model, ModelEvents::Created, $payload, $isTest);
     }
 
     /**

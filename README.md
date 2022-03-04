@@ -10,6 +10,8 @@ A Laravel Nova tool that allows users to create and manage webhooks based on Elo
 
 A tool for Laravel's Nova administrator panel that enables users to create webhooks that can be customized to fire on specified Eloquent model events (created, updated, etc). This allows applications to communicate with other applications and integrations (Zapier, If This Then That, etc).
 
+This tool also includes a useful logging feature that will log any successful/failed webhooks to help with metrics and debugging.
+
 ## Table of Contents
 
 * [Installation](#installation)
@@ -26,6 +28,7 @@ A tool for Laravel's Nova administrator panel that enables users to create webho
   * [Webhook Secret](#webhook-secret) 
   * [Authorization](#authorization) 
   * [Testing Action](#testing-action)
+  * [Logging](#logging) 
 * [Testing and Development](#testing-and-development)
 
 ## Installation
@@ -104,7 +107,42 @@ public function tools()
 
 Two different configuration files are published with this package; one for this package (`nova-webhooks.php`) and one for the webhook server (`webhook-server.php`) that this package utilizes.
 
-This package relies on [Spatie's webhook server package](https://github.com/spatie/laravel-webhook-server) to dispatch each webhook request. Feel free to configure the server to your needs using the associated documentation. 
+This package relies on [Spatie's webhook server package](https://github.com/spatie/laravel-webhook-server) to dispatch each webhook request. Feel free to configure the server to your needs using the associated documentation.
+
+### Available Configuration Settings
+
+Available configuration settings for this tool:
+
+```php
+return [
+
+    /**
+     * Whether webhooks should be sent
+     */
+    'enabled' => env('NOVA_WEBHOOKS_ENABLED', true),
+
+    /**
+     * If logging should be enabled for each successful/failed request
+     */
+    'logging' => [
+        'enabled' => env('NOVA_WEBHOOKS_LOGGING_ENABLED', true),
+    ],
+
+    /**
+     * Enter the desired formatting for timestamps that are attached to logging.
+     * See the official PHP documentation for more information: https://www.php.net/manual/en/datetime.format.php
+     */
+    'date_format' => 'Y-m-d @ G:i',
+
+    /**
+     * The Laravel Nova resource that manages your authenticated users.
+     */
+    'users' => [
+        'resource' => App\Nova\User::class
+    ]
+
+];
+```
 
 ## Implementing the Tool
 
@@ -269,6 +307,14 @@ Probably the most important part of any webhook is testing and validation that y
 #### Sample Data
 
 When you want execute a test, this package will pull a random entry in the selected model's table in your database and use it as the subject for your webhook. If you don't have any records available yet, the action will throw an error instructing you to add the necessary records before you proceed.
+
+### Logging
+
+Unless specifically configured (as seen above), this tool will log successful and failed webhook operations. Successful events are simply stored for analytics purposes and are then displayed with some simple accompanying charts.
+
+![Resource Analytics](https://github.com/dniccum/nova-webhooks/blob/main/assets/resource-analytics.png?raw=true)
+
+If the desired endpoint that your webhooks are pointed throws an error, this tool will capture the response and log it accordingly. You can then view the associated error message within the Webhook that was created.
 
 ## Testing and Development
 

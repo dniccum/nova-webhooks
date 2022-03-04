@@ -12,6 +12,7 @@ trait UsesWebhookResource
 
         Nova::resources([
             Webhook::class,
+            WebhookLog::class,
         ]);
     }
 }
