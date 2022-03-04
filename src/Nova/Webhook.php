@@ -4,9 +4,11 @@ namespace Dniccum\NovaWebhooks\Nova;
 
 use Coroowicaksono\ChartJsIntegration\StackedChart;
 use Dniccum\NovaWebhooks\Models\WebhookLog;
+use Dniccum\NovaWebhooks\Nova\WebhookLog as WebhookLogResource;
 use Dniccum\NovaWebhooks\Nova\Actions\WebhookTestAction;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\CardRequest;
@@ -48,6 +50,9 @@ class Webhook extends WebhookResource
 
             BelongsTo::make(__('nova-webhooks::nova.last_modified_by'), 'modifiedBy', config('nova-webhooks.users.resource'))
                 ->exceptOnForms()
+                ->readonly(),
+
+            HasMany::make(__('nova-webhooks::nova.webhook_failure_logs'), 'logs', WebhookLogResource::class)
                 ->readonly(),
         ];
     }

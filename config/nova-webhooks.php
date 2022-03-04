@@ -16,6 +16,12 @@ return [
     ],
 
     /**
+     * Enter the desired formatting for timestamps that are attached to logging.
+     * See the official PHP documentation for more information: https://www.php.net/manual/en/datetime.format.php
+     */
+    'date_format' => 'Y-m-d @ G:i',
+
+    /**
      * The Laravel Nova resource that manages your authenticated users.
      */
     'users' => [
