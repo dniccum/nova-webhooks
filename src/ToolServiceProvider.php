@@ -2,6 +2,7 @@
 
 namespace Dniccum\NovaWebhooks;
 
+use Coroowicaksono\ChartJsIntegration\CardServiceProvider;
 use Dniccum\NovaWebhooks\Library\ModelUtility;
 use Dniccum\NovaWebhooks\Library\WebhookUtility;
 use Dniccum\NovaWebhooks\Providers\ToolEventServiceProvider;
@@ -95,6 +96,7 @@ class ToolServiceProvider extends ServiceProvider
             return new ModelUtility;
         });
         $this->app->register(ToolEventServiceProvider::class);
+        $this->app->resolveProvider(CardServiceProvider::class);
     }
 
     protected function registerAddonConfig() : ToolServiceProvider

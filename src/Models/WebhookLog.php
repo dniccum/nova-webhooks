@@ -32,7 +32,9 @@ class WebhookLog extends Model
         parent::boot();
 
         static::creating(function(WebhookLog $model) {
-            $model->created_at = now();
+            if (!$model->created_at) {
+                $model->created_at = now();
+            }
         });
     }
 
