@@ -19,9 +19,14 @@
     "require": {
         "php": "^7.4|^8.0",
         "bensampo/laravel-enum": "^4.2",
+        "coroowicaksono/chart-js-integration": "^0.3.5",
         "owenmelbz/nova-radio-field": "^1.0",
         "spatie/laravel-webhook-server": "^2.0",
         "symfony/class-loader": "^3.4"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.24",
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
@@ -46,9 +51,5 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "require-dev": {
-        "orchestra/testbench": "^6.24",
-        "phpunit/phpunit": "^9.5"
-    }
+    "prefer-stable": true
 }
