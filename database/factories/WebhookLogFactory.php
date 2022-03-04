@@ -23,11 +23,12 @@ class WebhookLogFactory extends Factory
     {
         return [
             'successful' => true,
+            'created_at' => now(),
         ];
     }
 
     /**
-     * @return WebhookLogFactory|m.\Dniccum\NovaWebhooks\Database\Factories\WebhookLogFactory.state
+     * @return WebhookLogFactory|\Dniccum\NovaWebhooks\Database\Factories\WebhookLogFactory.state
      */
     public function notFound()
     {
@@ -41,7 +42,7 @@ class WebhookLogFactory extends Factory
     }
 
     /**
-     * @return WebhookLogFactory|m.\Dniccum\NovaWebhooks\Database\Factories\WebhookLogFactory.state
+     * @return WebhookLogFactory|\Dniccum\NovaWebhooks\Database\Factories\WebhookLogFactory.state
      */
     public function failed()
     {
