@@ -27,9 +27,13 @@ class WebhookSucceeded
     {
         if (config('nova-webhooks.logging.enabled')) {
             $meta = $event->meta;
-            $log = new WebhookLog;
-            $log->webhook_id = isset($meta['webhook_id']) ? $meta['webhook_id'] : null;
-            $log->save();
+            $isATest = isset($meta['test']) ? $meta['test'] : false;
+
+            if (!$isATest) {
+                $log = new WebhookLog;
+                $log->webhook_id = isset($meta['webhook_id']) ? $meta['webhook_id'] : null;
+                $log->save();
+            }
         }
     }
 }

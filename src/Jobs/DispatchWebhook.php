@@ -34,18 +34,25 @@ class DispatchWebhook implements ShouldQueue
     public $payload;
 
     /**
+     * @var bool
+     */
+    public bool $isTest = false;
+
+    /**
      * Create a new job instance.
      *
      * @param Model $model
      * @param string $action
      * @param array $payload
+     * @param bool $isTest
      * @return void
      */
-    public function __construct($model, string $action = ModelEvents::Created, array $payload = [])
+    public function __construct($model, string $action = ModelEvents::Created, array $payload = [], bool $isTest = false)
     {
         $this->model = $model;
         $this->action = $action;
         $this->payload = $payload;
+        $this->isTest = $isTest;
     }
 
     /**
@@ -55,7 +62,7 @@ class DispatchWebhook implements ShouldQueue
      */
     public function handle()
     {
-        WebhookUtility::processWebhooks($this->model, $this->action, $this->payload);
+        WebhookUtility::processWebhooks($this->model, $this->action, $this->payload, $this->isTest);
     }
 
     /**

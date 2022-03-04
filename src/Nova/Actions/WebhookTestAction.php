@@ -84,11 +84,11 @@ class WebhookTestAction extends Action
             }
 
             if ($actionName->is(ModelEvents::Created)) {
-                $class::createdWebhook($webhookModel);
+                $class::createdWebhook($webhookModel, true);
             } elseif ($actionName->is(ModelEvents::Updated)) {
-                $class::updatedWebhook($webhookModel);
+                $class::updatedWebhook($webhookModel, true);
             } elseif ($actionName->is(ModelEvents::Deleted)) {
-                $class::deletedWebhook($webhookModel);
+                $class::deletedWebhook($webhookModel, true);
             }
         }
     }

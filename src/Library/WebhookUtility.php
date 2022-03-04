@@ -18,10 +18,11 @@ class WebhookUtility
      * @param Model $model
      * @param array|JsonResource $payload
      * @param string $action
+     * @param bool $isTest If the webhook is running as a test through the testing action
      * @return void
      * @throws \Exception
      */
-    public static function executeWebhook($model, string $action = ModelEvents::Created, $payload = []) : void
+    public static function executeWebhook($model, string $action = ModelEvents::Created, $payload = [], bool $isTest = false) : void
     {
         if (!config('nova-webhooks.enabled')) {
             return;
@@ -40,9 +41,9 @@ class WebhookUtility
         $shouldQueue = method_exists($model, 'queueWebhook') && $model::queueWebhook();
         if ($shouldQueue) {
             $jobToUse = $model::$job;
-            dispatch(new $jobToUse($model, $action, $payload));
+            dispatch(new $jobToUse($model, $action, $payload, $isTest));
         } else {
-            self::processWebhooks($model, $action, $payload);
+            self::processWebhooks($model, $action, $payload, $isTest);
         }
     }
 
@@ -50,9 +51,10 @@ class WebhookUtility
      * @param Model $model
      * @param string $action
      * @param array $payload
+     * @param bool $isTest If the webhook is running as a test through the testing action
      * @return void
      */
-    public static function processWebhooks($model, $action, array $payload = [])
+    public static function processWebhooks($model, $action, array $payload = [], bool $isTest = false)
     {
         /**
          * Retrieves the name of the model class with namespacing
@@ -61,22 +63,24 @@ class WebhookUtility
         $className  = get_class($model);
 
         $hooks = self::getWebhooks($className.':'.$action);
-        $hooks->each(function(Webhook $webhook) use ($model, $payload) {
-            self::compileWebhook($webhook, $payload);
+        $hooks->each(function(Webhook $webhook) use ($model, $payload, $isTest) {
+            self::compileWebhook($webhook, $payload, $isTest);
         });
     }
 
     /**
      * @param Webhook $webhook
      * @param array $payload
+     * @param bool $isTest If the webhook is being tested, a successful log entry will not be saved.
      * @return WebhookCall
      */
-    public static function compileWebhook(Webhook $webhook, array $payload = []) : PendingDispatch
+    public static function compileWebhook(Webhook $webhook, array $payload = [], bool $isTest = false) : PendingDispatch
     {
         return WebhookCall::create()
             ->url($webhook->url)
             ->meta([
                 'webhook_id' => $webhook->id,
+                'test' => $isTest,
             ])
             ->withTags([
                 'nova-webhooks',

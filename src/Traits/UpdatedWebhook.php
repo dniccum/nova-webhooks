@@ -26,13 +26,14 @@ trait UpdatedWebhook
 
     /**
      * @param \Illuminate\Database\Eloquent\Model $model
+     * @param boolean $isTest If the webhook is running as a test through the testing action
      * @return void
      * @throws \Exception
      */
-    public static function updatedWebhook($model)
+    public static function updatedWebhook($model, bool $isTest = false)
     {
         $payload = self::updatedWebhookPayload($model);
-        WebhookUtility::executeWebhook($model, ModelEvents::Updated, $payload);
+        WebhookUtility::executeWebhook($model, ModelEvents::Updated, $payload, $isTest);
     }
 
     /**

@@ -26,16 +26,17 @@ trait DeletedWebhook
 
     /**
      * @param \Illuminate\Database\Eloquent\Model $model
+     * @param boolean $isTest If the webhook is running as a test through the testing action
      * @return void
      * @throws \Exception
      */
-    public static function deletedWebhook($model)
+    public static function deletedWebhook($model, bool $isTest = false)
     {
         /**
          * @param \Illuminate\Database\Eloquent\Model $model
          */
         $payload = self::deletedWebhookPayload($model);
-        WebhookUtility::executeWebhook($model, ModelEvents::Deleted, $payload);
+        WebhookUtility::executeWebhook($model, ModelEvents::Deleted, $payload, $isTest);
     }
 
     /**
