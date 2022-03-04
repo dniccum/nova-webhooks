@@ -75,6 +75,13 @@ class WebhookUtility
     {
         return WebhookCall::create()
             ->url($webhook->url)
+            ->meta([
+                'webhook_id' => $webhook->id,
+            ])
+            ->withTags([
+                'nova-webhooks',
+                \Str::slug($webhook->name).'-webhook',
+            ])
             ->payload($payload)
             ->useSecret($webhook->secret)
             ->dispatch();
