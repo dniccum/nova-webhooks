@@ -4,7 +4,8 @@ namespace Dniccum\NovaWebhooks\Tests;
 
 use Dniccum\NovaWebhooks\Database\Migrations\CreatePageLikesTable;
 use Dniccum\NovaWebhooks\Database\Migrations\CreatePageViewsTable;
-use Dniccum\NovaWebhooks\Database\Migrations\CreateWebhooksTable;
+use CreateWebhookLogsTable;
+use CreateWebhooksTable;
 use Dniccum\NovaWebhooks\Models\Webhook;
 use Dniccum\NovaWebhooks\Tests\Models\Api\PageLike;
 use Dniccum\NovaWebhooks\Tests\Models\PageView;
@@ -36,11 +37,13 @@ class TestCase extends OrchestraTestCase
         $this->artisan('migrate', ['--database' => 'testing']);
 
         include_once __DIR__ . '/../database/migrations/create_webhooks_table.php.stub';
+        include_once __DIR__ . '/../database/migrations/create_webhook_logs_table.php.stub';
         include_once __DIR__ . '/database/migrations/create_page_views_table.php.stub';
         include_once __DIR__ . '/database/migrations/create_page_likes_table.php.stub';
         (new CreatePageViewsTable())->up();
         (new CreatePageLikesTable())->up();
         (new CreateWebhooksTable())->up();
+        (new CreateWebhookLogsTable())->up();
     }
 
     /**
