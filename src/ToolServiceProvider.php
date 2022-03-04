@@ -4,6 +4,7 @@ namespace Dniccum\NovaWebhooks;
 
 use Dniccum\NovaWebhooks\Library\ModelUtility;
 use Dniccum\NovaWebhooks\Library\WebhookUtility;
+use Dniccum\NovaWebhooks\Providers\ToolEventServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Events\ServingNova;
@@ -57,6 +58,11 @@ class ToolServiceProvider extends ServiceProvider
                     __DIR__ . '/../database/migrations/create_webhooks_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_webhooks_table.php')
                 ], 'nova-webhooks');
             }
+            if (! class_exists('CreateWebhookLogsTable')) {
+                $this->publishes([
+                    __DIR__ . '/../database/migrations/create_webhook_logs_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_webhook_logs_table.php')
+                ], 'nova-webhooks');
+            }
         }
 
         return $this;
@@ -68,7 +74,7 @@ class ToolServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/../resources/lang' => resource_path('lang/vendor/nova-webhooks'),
-        ], 'nova-webhooks');
+        ], 'nova-webhooks-translations');
 
         return $this;
     }
@@ -88,6 +94,7 @@ class ToolServiceProvider extends ServiceProvider
         $this->app->bind('webhook-models', function() {
             return new ModelUtility;
         });
+        $this->app->register(ToolEventServiceProvider::class);
     }
 
     protected function registerAddonConfig() : ToolServiceProvider
