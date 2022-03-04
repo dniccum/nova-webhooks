@@ -32,7 +32,7 @@ class WebhookUtility
             $payload = $payload->toArray($request);
         } elseif (!is_array($payload)) {
             throw new \Exception(
-                'Please provide either a valid array or an instance of a JsonResource.', // TODO add translation
+                __('nova-webhooks::nova.resource_validation_error'),
                 500
             );
         }

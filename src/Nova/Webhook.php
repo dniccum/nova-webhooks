@@ -75,7 +75,7 @@ class Webhook extends WebhookResource
         $resourceId = $request->get('resourceId');
         $dataSeries = [
             [
-                'label' => 'Successful Calls', // TODO add translation
+                'label' => __('nova-webhooks::nova.successful_calls'),
                 'backgroundColor' => '#2BAE68',
                 'filter' => [
                     'key' => 'successful',
@@ -84,7 +84,7 @@ class Webhook extends WebhookResource
                 ],
             ],
             [
-                'label' => 'Failed Calls', // TODO add translation
+                'label' => __('nova-webhooks::nova.failed_calls'),
                 'backgroundColor' => '#FF4D4F',
                 'filter' => [
                     'key' => 'error_code',
