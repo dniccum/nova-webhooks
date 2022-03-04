@@ -2,7 +2,6 @@
 
 namespace Dniccum\NovaWebhooks\Nova;
 
-use Coroowicaksono\ChartJsIntegration\StackedChart;
 use Dniccum\NovaWebhooks\Models\WebhookLog as WebhookModel;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Date;
