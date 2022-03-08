@@ -21,7 +21,7 @@
         "bensampo/laravel-enum": "^4.2",
         "coroowicaksono/chart-js-integration": "^0.3.5",
         "owenmelbz/nova-radio-field": "^1.0",
-        "spatie/laravel-webhook-server": "^2.0",
+        "spatie/laravel-webhook-server": "^2.0|^3.0",
         "symfony/class-loader": "^3.4"
     },
     "require-dev": {
