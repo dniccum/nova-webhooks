@@ -6,22 +6,21 @@ use Coroowicaksono\ChartJsIntegration\StackedChart;
 use Dniccum\NovaWebhooks\Models\WebhookLog;
 use Dniccum\NovaWebhooks\Nova\WebhookLog as WebhookLogResource;
 use Dniccum\NovaWebhooks\Nova\Actions\WebhookTestAction;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\CardRequest;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Webhook extends WebhookResource
 {
     /**
      * Get the fields displayed by the Webhook resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
-    public function fields(Request $request)
+    public function fields(NovaRequest $request)
     {
         return [
             ID::make()->sortable(),
@@ -60,10 +59,10 @@ class Webhook extends WebhookResource
     /**
      * Get the actions available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
-    public function actions(Request $request)
+    public function actions(NovaRequest $request)
     {
         return [
             (new WebhookTestAction($this->model()))
@@ -72,10 +71,10 @@ class Webhook extends WebhookResource
     }
 
     /**
-     * @param Request|CardRequest $request
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
-    public function cards(Request $request)
+    public function cards(NovaRequest $request)
     {
         $resourceId = $request->get('resourceId');
         $dataSeries = [
