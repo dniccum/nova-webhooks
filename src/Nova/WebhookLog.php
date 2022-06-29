@@ -3,7 +3,7 @@
 namespace Dniccum\NovaWebhooks\Nova;
 
 use Dniccum\NovaWebhooks\Models\WebhookLog as WebhookModel;
-use Illuminate\Http\Request;
+
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
@@ -46,10 +46,10 @@ class WebhookLog extends WebhookResource
     /**
      * Get the fields displayed by the Webhook resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
-    public function fields(Request $request)
+    public function fields(NovaRequest $request)
     {
         return [
             ID::make()->sortable(),
