@@ -35,6 +35,7 @@ class Webhook extends WebhookResource
             URL::make(__('nova-webhooks::nova.url'), 'url')
                 ->help(__('nova-webhooks::nova.url_help'))
                 ->placeholder('https://hooks.zapier.com/hooks/catch/abcd1234')
+                ->displayUsing(fn () => $this->url)
                 ->sortable()
                 ->rules('required', 'url'),
 
