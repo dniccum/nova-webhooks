@@ -2,6 +2,7 @@
 
 namespace Dniccum\NovaWebhooks;
 
+use Illuminate\Http\Request;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Tool;
 
@@ -19,12 +20,13 @@ class NovaWebhooks extends Tool
     }
 
     /**
-     * Build the view that renders the navigation links for the tool.
+     * Build the menu that renders the navigation links for the tool.
      *
-     * @return \Illuminate\View\View
+     * @param  \Illuminate\Http\Request $request
+     * @return mixed
      */
-    public function renderNavigation()
+    public function menu(Request $request)
     {
-//        return view('nova-webhooks::navigation');
+        return null;
     }
 }
