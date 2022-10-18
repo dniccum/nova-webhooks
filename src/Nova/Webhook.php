@@ -10,6 +10,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\URL;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Webhook extends WebhookResource
@@ -31,7 +32,7 @@ class Webhook extends WebhookResource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make(__('nova-webhooks::nova.url'), 'url')
+            URL::make(__('nova-webhooks::nova.url'), 'url')
                 ->help(__('nova-webhooks::nova.url_help'))
                 ->placeholder('https://hooks.zapier.com/hooks/catch/abcd1234')
                 ->sortable()
