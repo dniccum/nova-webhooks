@@ -19,7 +19,7 @@
     "require": {
         "php": "^7.4|^8.0",
         "bensampo/laravel-enum": "^4.2|^5.1",
-        "coroowicaksono/chart-js-integration": "^0.3.5",
+        "coroowicaksono/chart-js-integration": "0.4.0",
         "laravel/nova": "~4.0",
         "owenmelbz/nova-radio-field": "^1.0",
         "spatie/laravel-webhook-server": "^2.0|^3.0",
