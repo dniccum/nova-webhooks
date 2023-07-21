@@ -110,6 +110,7 @@ class Webhook extends WebhookResource
                 (new StackedChart())
                     ->title('Webhook Activity')
                     ->model(WebhookLog::class)
+                    ->col_xaxis('created_at')
                     ->series($dataSeries)
                     ->options([
                         'uom' => 'month', // available in 'day', 'week', 'month', 'hour'
@@ -139,6 +140,7 @@ class Webhook extends WebhookResource
             (new StackedChart())
                 ->title('Webhook Activity')
                 ->model(WebhookLog::class)
+                ->col_xaxis('created_at')
                 ->series($dataSeries)
                 ->options([
                     'uom' => 'month', // available in 'day', 'week', 'month', 'hour'
