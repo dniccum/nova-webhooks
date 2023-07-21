@@ -18,7 +18,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.4|^8.0",
-        "bensampo/laravel-enum": "^4.2|^5.1",
+        "bensampo/laravel-enum": "^4.2|^5.1|^6.1",
         "coroowicaksono/chart-js-integration": "0.4.0",
         "laravel/nova": "~4.0",
         "owenmelbz/nova-radio-field": "^1.0",
