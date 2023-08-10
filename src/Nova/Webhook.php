@@ -2,16 +2,17 @@
 
 namespace Dniccum\NovaWebhooks\Nova;
 
-use Coroowicaksono\ChartJsIntegration\StackedChart;
-use Dniccum\NovaWebhooks\Models\WebhookLog;
-use Dniccum\NovaWebhooks\Nova\WebhookLog as WebhookLogResource;
-use Dniccum\NovaWebhooks\Nova\Actions\WebhookTestAction;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\HasMany;
+use Illuminate\Support\Str;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\URL;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\BelongsTo;
+use Dniccum\NovaWebhooks\Models\WebhookLog;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Coroowicaksono\ChartJsIntegration\StackedChart;
+use Dniccum\NovaWebhooks\Nova\Actions\WebhookTestAction;
+use Dniccum\NovaWebhooks\Nova\WebhookLog as WebhookLogResource;
 
 class Webhook extends WebhookResource
 {
@@ -41,10 +42,15 @@ class Webhook extends WebhookResource
 
             Text::make(__('nova-webhooks::nova.secret'), 'secret')
                 ->help(__('nova-webhooks::nova.secret_help'))
-                ->hideFromIndex()
+                ->onlyOnForms()
                 ->placeholder(null)
                 ->updateRules('required', 'string', 'min:10', 'max:100')
                 ->creationRules('nullable', 'string'),
+
+            Text::make(__('nova-webhooks::nova.secret'), 'secret')
+                ->help(__('nova-webhooks::nova.secret_help'))
+                ->onlyOnDetail()
+                ->displayUsing(fn (string $value) => Str::mask($value, '*', 3)),
 
             $this->optionGroup()
                 ->help(__('nova-webhooks::nova.available_actions_help')),
@@ -104,6 +110,7 @@ class Webhook extends WebhookResource
                 (new StackedChart())
                     ->title('Webhook Activity')
                     ->model(WebhookLog::class)
+                    ->col_xaxis('created_at')
                     ->series($dataSeries)
                     ->options([
                         'uom' => 'month', // available in 'day', 'week', 'month', 'hour'
@@ -133,6 +140,7 @@ class Webhook extends WebhookResource
             (new StackedChart())
                 ->title('Webhook Activity')
                 ->model(WebhookLog::class)
+                ->col_xaxis('created_at')
                 ->series($dataSeries)
                 ->options([
                     'uom' => 'month', // available in 'day', 'week', 'month', 'hour'
