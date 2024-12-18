@@ -2,15 +2,16 @@
 
 namespace Dniccum\NovaWebhooks;
 
-use Coroowicaksono\ChartJsIntegration\CardServiceProvider;
-use Dniccum\NovaWebhooks\Library\ModelUtility;
-use Dniccum\NovaWebhooks\Library\WebhookUtility;
-use Dniccum\NovaWebhooks\Providers\ToolEventServiceProvider;
+use Laravel\Nova\Nova;
+use Illuminate\Support\Carbon;
+use Laravel\Nova\Events\ServingNova;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Nova\Events\ServingNova;
-use Laravel\Nova\Nova;
+use Dniccum\NovaWebhooks\Library\ModelUtility;
+use Dniccum\NovaWebhooks\Library\WebhookUtility;
 use Dniccum\NovaWebhooks\Http\Middleware\Authorize;
+use Coroowicaksono\ChartJsIntegration\CardServiceProvider;
+use Dniccum\NovaWebhooks\Providers\ToolEventServiceProvider;
 
 class ToolServiceProvider extends ServiceProvider
 {
@@ -54,14 +55,15 @@ class ToolServiceProvider extends ServiceProvider
     protected function migrations()
     {
         if ($this->app->runningInConsole()) {
+            $now = Carbon::now();
             if (! class_exists('CreateWebhooksTable')) {
                 $this->publishes([
-                    __DIR__ . '/../database/migrations/create_webhooks_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_webhooks_table.php')
+                    __DIR__ . '/../database/migrations/create_webhooks_table.php.stub' => database_path('migrations/' . $now->format('Y_m_d_His') . '_create_webhooks_table.php')
                 ], 'nova-webhooks');
             }
             if (! class_exists('CreateWebhookLogsTable')) {
                 $this->publishes([
-                    __DIR__ . '/../database/migrations/create_webhook_logs_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_webhook_logs_table.php')
+                    __DIR__ . '/../database/migrations/create_webhook_logs_table.php.stub' => database_path('migrations/' . $now->addSecond()->format('Y_m_d_His') . '_create_webhook_logs_table.php')
                 ], 'nova-webhooks');
             }
         }

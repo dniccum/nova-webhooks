@@ -36,7 +36,7 @@ This tool also includes a useful logging feature that will log any successful/fa
 You can install the package via composer:
 
 ```bash
-composer require dniccum/nova-documentation
+composer require dniccum/nova-webhooks
 ```
 
 You will then need to publish the package's assets to your application:
