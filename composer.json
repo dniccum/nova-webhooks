@@ -11,23 +11,23 @@
         {
             "name": "Doug Niccum",
             "email": "dniccumdesign@gmail.com",
-            "homepage": "http://dniccumdesign.com",
+            "homepage": "https://dniccumdesign.com",
             "role": "Developer"
         }
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.4|^8.0",
-        "bensampo/laravel-enum": "^4.2|^5.1|^6.1",
-        "coroowicaksono/chart-js-integration": "0.4.0",
-        "laravel/nova": "~4.0",
+        "php": "^8.1",
+        "bensampo/laravel-enum": "^6.0",
+        "coroowicaksono/chart-js-integration": "^0.3.5",
+        "laravel/nova": "^5.0",
         "owenmelbz/nova-radio-field": "^1.0",
-        "spatie/laravel-webhook-server": "^2.0|^3.0",
+        "spatie/laravel-webhook-server": "^3.0",
         "symfony/class-loader": "^3.4"
     },
     "require-dev": {
-        "orchestra/testbench": "^6.24",
-        "phpunit/phpunit": "^9.5"
+        "orchestra/testbench": "^9.8.0",
+        "phpunit/phpunit": "^10.5.35"
     },
     "autoload": {
         "psr-4": {
